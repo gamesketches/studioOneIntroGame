@@ -3,7 +3,7 @@
   //NYU Game Center 2015
 
   //Creates a new Phaser Game
-  //You might want to check here to understand the basics of Phaser: http://www.photonstorm.com/phaser/tutorial-making-your-first-phaser-game                 
+  //You might want to check here to understand the basics of Phaser: http://www.photonstorm.com/phaser/tutorial-making-your-first-phaser-game
   var game = new Phaser.Game(520, 520, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render});
 
   //define a variable to control the speed of player movement
@@ -49,17 +49,17 @@
   //the "preload" function allows you to load images, text, fonts, sounds, and more when your program first starts,
   //so they will be fast to use later. They are loaded into a "cache", or into memory of the application where they
   //can easily be located later. It also allows you to set up initial variables.
-  function preload () {   
+  function preload () {
 
     //LOAD IMAGES
     //the player image into memory
-    game.load.image('player', 'assets/image/Ring.png');
+    game.load.image('player', 'assets/image/faceFront.png');
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
-    game.load.image(colorArray[0], 'assets/image/Red.png'); 
-    game.load.image(colorArray[1], 'assets/image/Green.png'); 
-    game.load.image(colorArray[2], 'assets/image/Blue.png'); 
-    game.load.image(colorArray[3], 'assets/image/Yellow.png'); 
+    game.load.image(colorArray[0], 'assets/image/Red.png');
+    game.load.image(colorArray[1], 'assets/image/Green.png');
+    game.load.image(colorArray[2], 'assets/image/Blue.png');
+    game.load.image(colorArray[3], 'assets/image/Yellow.png');
 
      //LOAD SOUNDS
     game.load.audio('scoreSound', 'assets/sound/coin.wav');
@@ -68,7 +68,7 @@
 
   function create () {
     //create the player sprite, using the image with the key 'player'
-  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'player'); 
+  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'player');
     //set the scale to half size, the image is twice as large as we want it to show up in the game
     player.scale.set(0.5, 0.5);
     //set the anchor to the middle, not the side
@@ -92,11 +92,11 @@
     errorAudio = game.add.audio('errorSound');
 
     //call the 'makeDots' on line 239, which creates dots in all 4 adjacent positions
-    //to the player if there isn't already a dot there 
+    //to the player if there isn't already a dot there
     makeDots();
   }
 
-  //In Phaser, the 'update' function is called once per frame. It's a place where you can check for 
+  //In Phaser, the 'update' function is called once per frame. It's a place where you can check for
   //user input and react to it, check for collisions and react to them, etc.
   function update(){
 
@@ -128,7 +128,6 @@
           score++;  //add one to the score
           scoreAudio.play(); //play the score sound
           player.color = dot.color; //make the player color equal to the color of the dot we just hit
-          player.tint = tintArray[player.color]; //change the color of the player to match the color of the dot
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
         } else { //otherwise, we did hit a dot that is the same color of player
           reset(); //call the "reset" function on line 161
@@ -140,7 +139,7 @@
       }
     }
 
-    if(canTurn){ //if the player can turn 
+    if(canTurn){ //if the player can turn
       turn(); //call the 'turn' on line 180, which changes the players durection to based on what nextDir is set to
     }
 
@@ -151,8 +150,8 @@
     }
   }
 
-  //The 'render' function is called once per frame in Phaser. It's mostly used to render extra debug 
-  //information on top of what what Phaser automatically shows you. Here we are using it to render the player's score 
+  //The 'render' function is called once per frame in Phaser. It's mostly used to render extra debug
+  //information on top of what what Phaser automatically shows you. Here we are using it to render the player's score
   function render(){
     game.debug.text("Score: " + score , 200, 32);
     //try commenting the line below in. It will show the player's hitbox.
@@ -169,7 +168,6 @@
     player.body.velocity.y = 0; //stop the player movement on the y axis
 
     player.color = 4; //set the player color to white
-    player.tint = tintArray[player.color]; 
 
     nextDir = -1; //set the nextDir to -1
 
@@ -220,7 +218,7 @@
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     }
     colorIndex++; //add 1 to colorIndex
-  
+
     //select a position to the above of the player
     pos = new Phaser.Point(player.position.x, player.position.y + -1 * player.height);
     hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
@@ -242,7 +240,7 @@
     //make a dot sprite from the dots group
     //use the colorArray (see line 39) to select the image
     //use the 'mod' (same as remainder) of the colorIndex to choose a color (4%4 == 0, 5%4 == 1, 6%4 == 2, etc)
-    var dot = dots.create(pos.x, pos.y, colorArray[colorIndex%4]); 
+    var dot = dots.create(pos.x, pos.y, colorArray[colorIndex%4]);
 
     dot.color = colorIndex%4; //set the dot color to the color based on the mod
     dot.anchor.setTo(0.5, 0.5); //set the anchor to the middle, not the side
