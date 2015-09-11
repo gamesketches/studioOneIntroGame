@@ -53,7 +53,10 @@
 
     //LOAD IMAGES
     //the player image into memory
-    game.load.image('player', 'assets/image/faceFront.png');
+    game.load.image('faceFront', 'assets/image/faceFront.png');
+    game.load.image('faceLeft', 'assets/image/faceLeft.png');
+    game.load.image('faceRight', 'assets/image/faceRight.png');
+    game.load.image('faceBack', 'assets/image/faceBack.png');
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
     game.load.image(colorArray[0], 'assets/image/Red.png');
@@ -68,7 +71,7 @@
 
   function create () {
     //create the player sprite, using the image with the key 'player'
-  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'player');
+  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'faceFront');
     //set the scale to half size, the image is twice as large as we want it to show up in the game
     player.scale.set(0.5, 0.5);
     //set the anchor to the middle, not the side
@@ -104,15 +107,19 @@
     {
       //set the nextDir variable to the value of DIR_UP, which is 0 (see line 29)
       nextDir = DIR_UP;
+      player.loadTexture('faceBack');
     } else if (cursors.down.isDown){ //otherwise, if the down arrow is pressed
       //set the nextDir variable to the value of DIR_DOWN, which is 0 (see line 30)
       nextDir = DIR_DOWN;
+      player.loadTexture('faceFront');
   	} else if (cursors.left.isDown){ //otherwise, if the left arrow is pressed
       //set the nextDir variable to the value of DIR_LEFT, which is 0 (see line 31)
       nextDir = DIR_LEFT;
+      player.loadTexture('faceLeft');
     } else if (cursors.right.isDown){ //otherwise, if the right arrow is pressed
       //set the nextDir variable to the value of DIR_RIGHT, which is 0 (see line 32)
       nextDir = DIR_RIGHT;
+      player.loadTexture('faceRight');
     }
 
     //loop through all the dots
