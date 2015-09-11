@@ -24,6 +24,9 @@
   //variable for the score
   var score = 0;
 
+  var biteCount = 0;
+  var playing = false;
+
   //variable for the direction the player will turn when it hits a dot
   var nextDir = -1;
 
@@ -39,12 +42,14 @@
 
   //array of dot color names
   var colorArray = ['red', 'green', 'blue', 'yellow', 'white'];
+
+  var soundArray = ['firstBite', 'secondBite', 'thirdBite', 'fourthBite'];
+
   //array of dot colors, 0xff0000 == red, 0x00ff00 = green, 0x00ffff == blue, etc
   var tintArray = [0xff0000, 0x00ff00, 0x00ffff, 0xffff00, 0xffffff];
 
-  //Sound varibales
-  var scoreAudio;
-  var errorAudio;
+
+  var bitesArray = [0,0,0,0,0];
 
   //the "preload" function allows you to load images, text, fonts, sounds, and more when your program first starts,
   //so they will be fast to use later. They are loaded into a "cache", or into memory of the application where they
@@ -64,9 +69,11 @@
     game.load.image(colorArray[2], 'assets/image/Blue.png');
     game.load.image(colorArray[3], 'assets/image/Yellow.png');
 
-     //LOAD SOUNDS
-    game.load.audio('scoreSound', 'assets/sound/coin.wav');
-    game.load.audio('errorSound', 'assets/sound/bumpwall.wav');
+    game.load.audio(soundArray[0], 'assets/sound/firstBite.wav');
+    game.load.audio(soundArray[1], 'assets/sound/secondBite.wav');
+    game.load.audio(soundArray[2], 'assets/sound/thirdBite.wav');
+    game.load.audio(soundArray[3], 'assets/sound/fourthBite.wav');
+
   }
 
   function create () {
@@ -90,9 +97,13 @@
     //create a variable for tracking when players hit buttons on the keyboard
     cursors = game.input.keyboard.createCursorKeys();
 
-    //create variables for the sounds
-    scoreAudio = game.add.audio('scoreSound');
-    errorAudio = game.add.audio('errorSound');
+
+    for(var i = 0; i < 4; i++) {
+      bitesArray[i] = game.add.audio(soundArray[i]);
+      bitesArray[i].onStop.add(playStopped, this);
+    }
+
+
 
     //call the 'makeDots' on line 239, which creates dots in all 4 adjacent positions
     //to the player if there isn't already a dot there
@@ -128,12 +139,11 @@
       var dot = dots.children[i];
 
       if(playerHit(dot)){ //if the player is hitting a dot
-        console.log("hit!"); //print out "hit!" to the javascript console
+        playBite();
         player.position.set(dot.position.x, dot.position.y); //jump the player to the exact position of the dot
 
         if(player.color != dot.color){ //if the color of the dot doesn't match the player's color
           score++;  //add one to the score
-          scoreAudio.play(); //play the score sound
           player.color = dot.color; //make the player color equal to the color of the dot we just hit
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
         } else { //otherwise, we did hit a dot that is the same color of player
@@ -180,7 +190,6 @@
 
     dots.removeAll(true); //remove all the dots from the dots group and destroy them
 
-    errorAudio.play();  //play the error sound
   }
 
   //function that turns the player
@@ -202,6 +211,23 @@
     } else if(nextDir == DIR_RIGHT){ //if nextDir is set to DIR_RIGHT
       player.body.velocity.x = speed; //make the player move right
     }
+  }
+
+  function playBite(){
+    if(!playing)
+    {
+      bitesArray[biteCount].play();
+      playing = true;
+      biteCount++;
+      if(biteCount > 3) {
+        biteCount = 0;
+      }
+    }
+
+  }
+
+  function playStopped() {
+    playing = false;
   }
 
   //function that creates dots up, down, left and right of the player
