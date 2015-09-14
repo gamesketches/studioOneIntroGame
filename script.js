@@ -153,12 +153,13 @@
         makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
 
         console.log("score: " + score); //print out the score to the javascript console
+        speed += 3;
       }
     }
 
-    if(canTurn){ //if the player can turn
+    //if(canTurn){ //if the player can turn
       turn(); //call the 'turn' on line 180, which changes the players durection to based on what nextDir is set to
-    }
+    //}
 
     if(!Phaser.Rectangle.containsPoint(game.world.bounds, player.position)){ //if the player has left the screen
       reset(); //call the "reset" function on line 161
@@ -189,6 +190,8 @@
     nextDir = -1; //set the nextDir to -1
 
     dots.removeAll(true); //remove all the dots from the dots group and destroy them
+
+    speed = 100;
 
   }
 
