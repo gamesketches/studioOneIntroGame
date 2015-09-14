@@ -45,6 +45,8 @@
 
   var soundArray = ['firstBite', 'secondBite', 'thirdBite', 'fourthBite'];
 
+  var song;
+
   //array of dot colors, 0xff0000 == red, 0x00ff00 = green, 0x00ffff == blue, etc
   var tintArray = [0xff0000, 0x00ff00, 0x00ffff, 0xffff00, 0xffffff];
 
@@ -75,6 +77,8 @@
     game.load.audio(soundArray[1], 'assets/sound/secondBite.wav');
     game.load.audio(soundArray[2], 'assets/sound/thirdBite.wav');
     game.load.audio(soundArray[3], 'assets/sound/fourthBite.wav');
+
+    game.load.audio('song', 'assets/sound/song.ogg');
 
   }
 
@@ -107,7 +111,8 @@
       bitesArray[i].onStop.add(playStopped, this);
     }
 
-
+    song = game.add.audio('song');
+    song.onStop.add(playStopped, this);
 
     //call the 'makeDots' on line 239, which creates dots in all 4 adjacent positions
     //to the player if there isn't already a dot there
@@ -188,7 +193,10 @@
   function reset(){
     player.position.set(game.world.width/2, game.world.height/2); //move the player back to the middle
 
+    song.stop();
     score = 0;  //set the scorre to 0
+    bitCount = 0;
+    playing = false;
 
     player.body.velocity.x = 0; //stop the player movement on the x axis
     player.body.velocity.y = 0; //stop the player movement on the y axis
@@ -227,12 +235,14 @@
   function playBite(){
     if(!playing)
     {
-      bitesArray[biteCount].play();
+      if(biteCount > 7) {
+        song.play();
+      }
+      else {
+      bitesArray[biteCount % 4].play();
+    }
       playing = true;
       biteCount++;
-      if(biteCount > 3) {
-        biteCount = 0;
-      }
     }
 
   }
