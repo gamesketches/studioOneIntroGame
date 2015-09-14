@@ -60,11 +60,6 @@
 
     //LOAD IMAGES
     //the player image into memory
-    game.load.image('faceFront', 'assets/image/faceFront.png');
-    game.load.image('faceLeft', 'assets/image/faceLeft.png');
-    game.load.image('faceRight', 'assets/image/faceRight.png');
-    game.load.image('faceBack', 'assets/image/faceBack.png');
-    game.load.image('faceFrontAgape', 'assets/image/faceFrontAgape.png');
 
     game.load.spritesheet('default', 'assets/image/faceSheet.png', 64, 64);
 
