@@ -272,7 +272,7 @@
     var colorIndex = score; //set color index to the current score
 
     //select a position to the left of the player
-    var pos = new Phaser.Point(Math.random() * 490 + 10, Math.random() * 490 + 10);
+    var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
     var hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
@@ -280,7 +280,7 @@
     colorIndex++; //add 1 to colorIndex
 
     //select a position to the right of the player
-    var pos = new Phaser.Point(Math.random() * 490 + 10, Math.random() * 490 + 10);
+    var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
     hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
@@ -310,10 +310,13 @@
   function checkHasDot(pos){
     var hasDot = false; //make a hasDot variable, set it to dot
 
+    playerBox = player.getBounds();
+
     for(var i = 0; i < dots.children.length; i++){ //loop through all the numbers from 0 to the number of children dots has
       var dot = dots.children[i]; //for each dot in the group, use the place holder varibale "dot"
 
-      if(Phaser.Rectangle.containsPoint(dot.getBounds(), pos)){ //if the position "pos" is inside of that dots position
+      if(Phaser.Rectangle.containsPoint(dot.getBounds(), pos) ||
+                    Phaser.Rectangle.containsPoint(playerBox, pos)){ //if the position "pos" is inside of that dots position
         hasDot = true; //set hasDot to true
       }
     }
