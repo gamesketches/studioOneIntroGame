@@ -66,6 +66,8 @@
     game.load.image('faceBack', 'assets/image/faceBack.png');
     game.load.image('faceFrontAgape', 'assets/image/faceFrontAgape.png');
 
+    game.load.spritesheet('default', 'assets/image/faceSheet.png', 64, 64);
+
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
     game.load.image(colorArray[0], 'assets/image/Red.png');
@@ -84,9 +86,11 @@
 
   function create () {
     //create the player sprite, using the image with the key 'player'
-  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'faceFront');
+  	player = game.add.sprite(game.world.width/2, game.world.height/2, 'default');
 
-    player.animations.add("eat", ['faceFront', 'faceFrontAgape'], 2, true);
+    player.animations.add('eat', [0, 2], 5, true);
+
+    player.frame = 0;
     //set the scale to half size, the image is twice as large as we want it to show up in the game
     player.scale.set(0.75, 0.75);
     //set the anchor to the middle, not the side
@@ -123,26 +127,32 @@
   //user input and react to it, check for collisions and react to them, etc.
   function update(){
 
+    if(!playing) {
+      player.animations.stop();
+    }
+
     if (cursors.up.isDown) //if the up arrow is pressed
     {
       //set the nextDir variable to the value of DIR_UP, which is 0 (see line 29)
       nextDir = DIR_UP;
-      player.loadTexture('faceBack');
+      player.frame = 1;
     } else if (cursors.down.isDown){ //otherwise, if the down arrow is pressed
       //set the nextDir variable to the value of DIR_DOWN, which is 0 (see line 30)
       nextDir = DIR_DOWN;
-      player.loadTexture('faceFront');
-      //playing ? player.animations.play("eat") : player.loadTexture('faceFront');
-
+      player.frame = 0;
   	} else if (cursors.left.isDown){ //otherwise, if the left arrow is pressed
       //set the nextDir variable to the value of DIR_LEFT, which is 0 (see line 31)
       nextDir = DIR_LEFT;
-      player.loadTexture('faceLeft');
+      player.frame = 3;
     } else if (cursors.right.isDown){ //otherwise, if the right arrow is pressed
       //set the nextDir variable to the value of DIR_RIGHT, which is 0 (see line 32)
       nextDir = DIR_RIGHT;
-      player.loadTexture('faceRight');
+      player.frame = 4;
     }
+    if(playing && nextDir == DIR_DOWN){
+      player.animations.play('eat')
+    }
+
 
     //loop through all the dots
     for(var i = 0; i < dots.children.length; i++){
@@ -197,7 +207,7 @@
 
     song.stop();
     score = 0;  //set the scorre to 0
-    bitCount = 0;
+    biteCount = 0;
     playing = false;
 
     player.body.velocity.x = 0; //stop the player movement on the x axis
@@ -237,7 +247,7 @@
   function playBite(){
     if(!playing)
     {
-      if(biteCount > 7) {
+      if(biteCount > 6) {
         song.play();
       }
       else {
