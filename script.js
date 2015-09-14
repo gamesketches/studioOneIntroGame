@@ -53,6 +53,8 @@
 
   var bitesArray = [0,0,0,0,0];
 
+  var spriteSheetArray = ['redFace', 'greenFace', 'blueFace', 'yellowFace'];
+
   //the "preload" function allows you to load images, text, fonts, sounds, and more when your program first starts,
   //so they will be fast to use later. They are loaded into a "cache", or into memory of the application where they
   //can easily be located later. It also allows you to set up initial variables.
@@ -62,6 +64,10 @@
     //the player image into memory
 
     game.load.spritesheet('default', 'assets/image/faceSheet.png', 64, 64);
+    game.load.spritesheet(spriteSheetArray[0], 'assets/image/faceSheetRed.png', 64, 64);
+    game.load.spritesheet(spriteSheetArray[1], 'assets/image/faceSheetGreen.png', 64, 64);
+    game.load.spritesheet(spriteSheetArray[2], 'assets/image/faceSheetBlue.png', 64, 64);
+    game.load.spritesheet(spriteSheetArray[3], 'assets/image/faceSheetYellow.png', 64, 64);
 
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
@@ -161,7 +167,7 @@
         if(player.color != dot.color){ //if the color of the dot doesn't match the player's color
           score++;  //add one to the score
           player.color = dot.color; //make the player color equal to the color of the dot we just hit
-          //player.tint = tintArray[player.color];
+          player.loadTexture(spriteSheetArray[player.color]);
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
         } else {
           console.log("Dead via", colorArray[player.color], colorArray[dot.color]);
@@ -200,6 +206,7 @@
   function reset(){
     player.position.set(game.world.width/2, game.world.height/2); //move the player back to the middle
 
+    player.loadTexture('default');
     song.stop();
     score = 0;  //set the scorre to 0
     biteCount = 0;
