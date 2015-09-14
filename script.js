@@ -90,7 +90,7 @@
     //enable physics on the player sprite
     game.physics.arcade.enable(player);
     //create a small collision box for the player, comment in line 157 to see the bounding box
-    player.body.setSize(16, 16, 0, 0);
+    player.body.setSize(64, 64, 0, 0);
     //make the initial player color 5 (white, no color)
     player.color = 5;
 
@@ -146,7 +146,7 @@
 
       if(playerHit(dot)){ //if the player is hitting a dot
         playBite();
-        player.position.set(dot.position.x, dot.position.y); //jump the player to the exact position of the dot
+        //player.position.set(dot.position.x, dot.position.y); //jump the player to the exact position of the dot
 
         if(player.color != dot.color){ //if the color of the dot doesn't match the player's color
           score++;  //add one to the score
