@@ -126,7 +126,8 @@
     } else if (cursors.down.isDown){ //otherwise, if the down arrow is pressed
       //set the nextDir variable to the value of DIR_DOWN, which is 0 (see line 30)
       nextDir = DIR_DOWN;
-      playing ? player.animations.play("eat") : player.loadTexture('faceFront');
+      player.loadTexture('faceFront');
+      //playing ? player.animations.play("eat") : player.loadTexture('faceFront');
 
   	} else if (cursors.left.isDown){ //otherwise, if the left arrow is pressed
       //set the nextDir variable to the value of DIR_LEFT, which is 0 (see line 31)
@@ -158,7 +159,9 @@
         makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
 
         console.log("score: " + score); //print out the score to the javascript console
-        speed += 3;
+        if(speed < 300) {
+          speed += 10;
+        }
       }
     }
 
@@ -245,7 +248,7 @@
     var colorIndex = score; //set color index to the current score
 
     //select a position to the left of the player
-    var pos = new Phaser.Point(player.position.x + -1 * player.width, player.position.y);
+    var pos = new Phaser.Point(Math.random() * 500, Math.random() * 500);
     var hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
@@ -253,27 +256,13 @@
     colorIndex++; //add 1 to colorIndex
 
     //select a position to the right of the player
-    pos = new Phaser.Point(player.position.x + 1 * player.width, player.position.y);
+    var pos = new Phaser.Point(Math.random() * 500, Math.random() * 500);
     hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     }
     colorIndex++; //add 1 to colorIndex
 
-    //select a position to the above of the player
-    pos = new Phaser.Point(player.position.x, player.position.y + -1 * player.height);
-    hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
-    if(!hasDot){ //if there's not a dot there
-      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
-    }
-    colorIndex++; //add 1 to colorIndex
-
-    //select a position to the below of the player
-    pos = new Phaser.Point(player.position.x, player.position.y + 1 * player.height);
-    hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
-    if(!hasDot){ //if there's not a dot there
-      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
-    }
   }
 
   //function that makes a dot on in the dots group, based on a 2 passes parameters: colorIndex and position
