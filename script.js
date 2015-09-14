@@ -62,6 +62,8 @@
     game.load.image('faceLeft', 'assets/image/faceLeft.png');
     game.load.image('faceRight', 'assets/image/faceRight.png');
     game.load.image('faceBack', 'assets/image/faceBack.png');
+    game.load.image('faceFrontAgape', 'assets/image/faceFrontAgape.png');
+
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
     game.load.image(colorArray[0], 'assets/image/Red.png');
@@ -79,8 +81,10 @@
   function create () {
     //create the player sprite, using the image with the key 'player'
   	player = game.add.sprite(game.world.width/2, game.world.height/2, 'faceFront');
+
+    player.animations.add("eat", ['faceFront', 'faceFrontAgape'], 2, true);
     //set the scale to half size, the image is twice as large as we want it to show up in the game
-    player.scale.set(0.5, 0.5);
+    player.scale.set(0.75, 0.75);
     //set the anchor to the middle, not the side
     player.anchor.setTo(0.5, 0.5);
     //enable physics on the player sprite
@@ -122,7 +126,8 @@
     } else if (cursors.down.isDown){ //otherwise, if the down arrow is pressed
       //set the nextDir variable to the value of DIR_DOWN, which is 0 (see line 30)
       nextDir = DIR_DOWN;
-      player.loadTexture('faceFront');
+      playing ? player.animations.play("eat") : player.loadTexture('faceFront');
+
   	} else if (cursors.left.isDown){ //otherwise, if the left arrow is pressed
       //set the nextDir variable to the value of DIR_LEFT, which is 0 (see line 31)
       nextDir = DIR_LEFT;
