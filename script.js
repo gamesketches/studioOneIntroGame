@@ -156,8 +156,10 @@
         if(player.color != dot.color){ //if the color of the dot doesn't match the player's color
           score++;  //add one to the score
           player.color = dot.color; //make the player color equal to the color of the dot we just hit
+          //player.tint = tintArray[player.color];
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
-        } else { //otherwise, we did hit a dot that is the same color of player
+        } else {
+          console.log("Dead via", colorArray[player.color], colorArray[dot.color]);
           reset(); //call the "reset" function on line 161
         }
         canTurn = true; //set the player's ability to turn to true
@@ -258,7 +260,7 @@
     var colorIndex = score; //set color index to the current score
 
     //select a position to the left of the player
-    var pos = new Phaser.Point(Math.random() * 500, Math.random() * 500);
+    var pos = new Phaser.Point(Math.random() * 490 + 10, Math.random() * 490 + 10);
     var hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
@@ -266,7 +268,7 @@
     colorIndex++; //add 1 to colorIndex
 
     //select a position to the right of the player
-    var pos = new Phaser.Point(Math.random() * 500, Math.random() * 500);
+    var pos = new Phaser.Point(Math.random() * 490 + 10, Math.random() * 490 + 10);
     hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     if(!hasDot){ //if there's not a dot there
       makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
@@ -280,9 +282,14 @@
     //make a dot sprite from the dots group
     //use the colorArray (see line 39) to select the image
     //use the 'mod' (same as remainder) of the colorIndex to choose a color (4%4 == 0, 5%4 == 1, 6%4 == 2, etc)
+    if(colorArray[colorIndex%4] == player.color)
+    {
+      colorIndex++;
+    }
     var dot = dots.create(pos.x, pos.y, colorArray[colorIndex%4]);
 
     dot.color = colorIndex%4; //set the dot color to the color based on the mod
+
     dot.anchor.setTo(0.5, 0.5); //set the anchor to the middle, not the side
     dot.scale.set(0.5, 0.5); //set the scale to half size, the image is twice as large as we want it to show up in the game
   }
