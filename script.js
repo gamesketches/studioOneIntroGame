@@ -47,6 +47,8 @@
 
   var song;
 
+  var gameOverText = null;
+
   //array of dot colors, 0xff0000 == red, 0x00ff00 = green, 0x00ffff == blue, etc
   var tintArray = [0xff0000, 0x00ff00, 0x00ffff, 0xffff00, 0xffffff];
 
@@ -128,6 +130,17 @@
   //user input and react to it, check for collisions and react to them, etc.
   function update(){
 
+    if(gameOverText) {
+      if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        //reset();
+        gameOverText.destroy();
+        gameOverText = null;
+        reset();
+        makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
+      }
+
+      return;
+    }
     if(!playing) {
       player.animations.stop();
     }
@@ -169,17 +182,21 @@
           player.color = dot.color; //make the player color equal to the color of the dot we just hit
           player.loadTexture(spriteSheetArray[player.color]);
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
+          console.log("score: " + score); //print out the score to the javascript console
+          if(speed < 300) {
+            speed += 10;
+          }
         } else {
           console.log("Dead via", colorArray[player.color], colorArray[dot.color]);
-          reset(); //call the "reset" function on line 161
+          gameOverText = game.add.text(game.world.centerX, game.world.centerY + 50, "",
+                              { font: "20px Arial", fill: "#ffFFFF", align: "center" });
+          gameOverText.anchor.setTo(0.5, 0.5);
+          gameOverText.setText("You need a balanced diet\n (spacebar to reset)");
+          player.body.velocity.x = 0;
+          player.body.velocity.y = 0;
         }
         canTurn = true; //set the player's ability to turn to true
         makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
-
-        console.log("score: " + score); //print out the score to the javascript console
-        if(speed < 300) {
-          speed += 10;
-        }
       }
     }
 
@@ -188,9 +205,14 @@
     //}
 
     if(!Phaser.Rectangle.containsPoint(game.world.bounds, player.position)){ //if the player has left the screen
-      reset(); //call the "reset" function on line 161
-      makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
+      gameOverText = game.add.text(game.world.centerX, game.world.centerY + 50, "",
+                          { font: "20px Arial", fill: "#ffFFFF", align: "center" });
+      gameOverText.anchor.setTo(0.5, 0.5);
+      gameOverText.setText("Stay in your box\n (spacebar to reset)");
+      player.body.velocity.x = 0;
+      player.body.velocity.y = 0;
       canTurn = true; //set the player's ability to turn to true
+
     }
   }
 
@@ -208,7 +230,7 @@
 
     player.loadTexture('default');
     song.stop();
-    score = 0;  //set the scorre to 0
+    score = 0;  //set the score to 0
     biteCount = 0;
     playing = false;
 
