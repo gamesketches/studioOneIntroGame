@@ -291,27 +291,49 @@
   function makeDots(){
     console.log("makeDots"); //print out "makeDots" to the javascript console
 
-    var colorIndex = score; //set color index to the current score
+    var colorIndex = Math.floor(Math.random() * 3); //set color index to the current score
+    var dotRoll = Math.random() * 10;
 
     var hasDot = true;
 
     //select a position to the left of the player
     while(hasDot) {
       var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
-      hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
+      var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
+      //pos = adjustToBeat(pos, distanceToPlayer);
+      console.log(pos);
+      hasDot = checkHasDot(pos, distanceToPlayer); //call the "checkHasDot" on line 251 to see if there is already a dot there
     }
     makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     colorIndex++; //add 1 to colorIndex
 
-    var hasDot = true;
-    //select a position to the right of the player
-    while(hasDot) {
-    var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
-    hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
-    }
-    makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
-    colorIndex++; //add 1 to colorIndex
+    if(dotRoll > 5) {
+      var hasDot = true;
+      //select a position to the right of the player
+      while(hasDot) {
+      var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
+      var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
+      //pos = adjustToBeat(pos, distanceToPlayer);
+      console.log(pos);
+      hasDot = checkHasDot(pos, distanceToPlayer); //call the "checkHasDot" on line 251 to see if there is already a dot there
+      }
+      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
+      colorIndex++; //add 1 to colorIndex
+      }
 
+    if(dotRoll > 8) {
+      var hasDot = true;
+      //select a position to the right of the player
+      while(hasDot) {
+      var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
+      var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
+      //pos = adjustToBeat(pos, distanceToPlayer);
+      console.log(pos);
+      hasDot = checkHasDot(pos, distanceToPlayer); //call the "checkHasDot" on line 251 to see if there is already a dot there
+      }
+      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
+      colorIndex++; //add 1 to colorIndex
+      }
   }
 
   //function that makes a dot on in the dots group, based on a 2 passes parameters: colorIndex and position
@@ -331,13 +353,28 @@
     dot.scale.set(0.5, 0.5); //set the scale to half size, the image is twice as large as we want it to show up in the game
   }
 
+  function adjustToBeat(pos, distanceToPlayer) {
+    beatDistance = 2.45 * speed;
+    beatDistance = beatDistance % 245;
+
+    offset = distanceToPlayer % beatDistance;
+
+    console.log("BeatDistance: ", beatDistance, "distanceToPlayer: ", distanceToPlayer);
+
+    if(pos.x < 240) {
+      pos.x += beatDistance;
+    }
+    else {
+      pos.x -= beatDistance;
+    }
+
+    return pos;
+  }
   //function that checks to see if the passed postion already has a dot, if it does, returns true, if not, returns false
-  function checkHasDot(pos){
+  function checkHasDot(pos, distanceToPlayer){
     var hasDot = false; //make a hasDot variable, set it to dot
 
     playerBox = player.getBounds();
-
-    var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
 
     if(distanceToPlayer < speed) {
       console.log("too close!");
@@ -351,6 +388,10 @@
                     Phaser.Rectangle.containsPoint(playerBox, pos)){ //if the position "pos" is inside of that dots position
         hasDot = true; //set hasDot to true
       }
+    }
+
+    if(pos.x < 32 || pos.x > 490 || pos.y < 32 || pos.y > 490) {
+      hasDot = true;
     }
 
     return hasDot; //return the value of hasDot (either true or false)
