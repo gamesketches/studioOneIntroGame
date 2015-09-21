@@ -187,13 +187,13 @@
             speed += 10;
           }
         } else {
-          console.log("Dead via", colorArray[player.color], colorArray[dot.color]);
           gameOverText = game.add.text(game.world.centerX, game.world.centerY + 50, "",
                               { font: "20px Arial", fill: "#ffFFFF", align: "center" });
           gameOverText.anchor.setTo(0.5, 0.5);
           gameOverText.setText("You need a balanced diet\n (spacebar to reset)");
           player.body.velocity.x = 0;
           player.body.velocity.y = 0;
+          song.stop();
         }
         canTurn = true; //set the player's ability to turn to true
         makeDots(); //call the 'makeDots' on line 201, which creates dots in all 4 adjacent positions
@@ -293,20 +293,23 @@
 
     var colorIndex = score; //set color index to the current score
 
+    var hasDot = true;
+
     //select a position to the left of the player
-    var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
-    var hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
-    if(!hasDot){ //if there's not a dot there
-      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
+    while(hasDot) {
+      var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
+      hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
     }
+    makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     colorIndex++; //add 1 to colorIndex
 
+    var hasDot = true;
     //select a position to the right of the player
+    while(hasDot) {
     var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
     hasDot = checkHasDot(pos); //call the "checkHasDot" on line 251 to see if there is already a dot there
-    if(!hasDot){ //if there's not a dot there
-      makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     }
+    makeDot(colorIndex, pos); //call the "makeDot" function on line 239 to make a dot there
     colorIndex++; //add 1 to colorIndex
 
   }
@@ -333,6 +336,13 @@
     var hasDot = false; //make a hasDot variable, set it to dot
 
     playerBox = player.getBounds();
+
+    var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
+
+    if(distanceToPlayer < speed) {
+      console.log("too close!");
+      return true;
+    }
 
     for(var i = 0; i < dots.children.length; i++){ //loop through all the numbers from 0 to the number of children dots has
       var dot = dots.children[i]; //for each dot in the group, use the place holder varibale "dot"
