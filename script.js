@@ -27,6 +27,9 @@
   var biteCount = 0;
   var playing = false;
 
+  var xWindowDelta = 0;
+  var yWindowDelta = 0;
+
   //variable for the direction the player will turn when it hits a dot
   var nextDir = -1;
 
@@ -183,7 +186,7 @@
           player.loadTexture(spriteSheetArray[player.color]);
           dots.remove(dot, true); //remove the dot from the group and destroy the sprite
           console.log("score: " + score); //print out the score to the javascript console
-          if(speed < 300) {
+          if(speed < 350) {
             speed += 10;
           }
         } else {
@@ -273,12 +276,26 @@
     {
       if(biteCount > 6) {
         song.play();
+        game.time.events.add(Phaser.Timer.SECOND * 6.1, function() { speed += 100;}, this);
       }
       else {
       bitesArray[biteCount % 4].play();
     }
       playing = true;
       biteCount++;
+      if(xWindowDelta < 250) {
+        xWindowDelta += 25;
+      }
+      if(yWindowDelta < 90) {
+        yWindowDelta += 10
+      }
+      game.width = 520 + xWindowDelta;
+      game.height = 520 + yWindowDelta;
+      game.world.width = 520 + xWindowDelta;
+      game.world.height = 520 + yWindowDelta;
+
+      game.renderer.resize(game.width, game.height);
+      window.dispatchEvent(new Event('resize'));
     }
 
   }
@@ -291,14 +308,14 @@
   function makeDots(){
     console.log("makeDots"); //print out "makeDots" to the javascript console
 
-    var colorIndex = Math.floor(Math.random() * 3); //set color index to the current score
+    var colorIndex = score; //set color index to the current score
     var dotRoll = Math.random() * 10;
 
     var hasDot = true;
 
     //select a position to the left of the player
     while(hasDot) {
-      var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
+      var pos = new Phaser.Point(Math.random() * (480 + xWindowDelta) + 32, Math.random() * 480 + 32);
       var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
       //pos = adjustToBeat(pos, distanceToPlayer);
       console.log(pos);
@@ -325,7 +342,7 @@
       var hasDot = true;
       //select a position to the right of the player
       while(hasDot) {
-      var pos = new Phaser.Point(Math.random() * 480 + 32, Math.random() * 480 + 32);
+      var pos = new Phaser.Point(Math.random() * (480 + xWindowDelta) + 32, Math.random() * 480 + 32);
       var distanceToPlayer = Math.abs(player.body.x - pos.x) + Math.abs(player.body.y - pos.y);
       //pos = adjustToBeat(pos, distanceToPlayer);
       console.log(pos);
@@ -390,7 +407,7 @@
       }
     }
 
-    if(pos.x < 32 || pos.x > 490 || pos.y < 32 || pos.y > 490) {
+    if(pos.x < 32 || pos.x > (490 + xWindowDelta) || pos.y < 32 || pos.y > 490) {
       hasDot = true;
     }
 
