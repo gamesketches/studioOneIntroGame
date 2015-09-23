@@ -222,7 +222,7 @@
   //The 'render' function is called once per frame in Phaser. It's mostly used to render extra debug
   //information on top of what what Phaser automatically shows you. Here we are using it to render the player's score
   function render(){
-    game.debug.text("Score: " + score , 200, 32);
+    game.debug.text("Score: " + score , game.world.width/2 - 40, 32);
     //try commenting the line below in. It will show the player's hitbox.
     //game.debug.body(player);
   }
