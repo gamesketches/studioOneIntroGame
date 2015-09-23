@@ -76,10 +76,10 @@
 
     //all the dot images into memory
     //colorArray[0] == 'red', colorArray[1] == 'green', colorArray[2] == 'blue',etc. See line 39
-    game.load.image(colorArray[0], 'assets/image/Red.png');
-    game.load.image(colorArray[1], 'assets/image/Green.png');
-    game.load.image(colorArray[2], 'assets/image/Blue.png');
-    game.load.image(colorArray[3], 'assets/image/Yellow.png');
+    game.load.image(colorArray[0], 'assets/image/redApple.png');
+    game.load.image(colorArray[1], 'assets/image/greenGrape.png');
+    game.load.image(colorArray[2], 'assets/image/blueBerry.png');
+    game.load.image(colorArray[3], 'assets/image/yellowMelon.png');
 
     game.load.audio(soundArray[0], 'assets/sound/firstBite.wav');
     game.load.audio(soundArray[1], 'assets/sound/secondBite.wav');
